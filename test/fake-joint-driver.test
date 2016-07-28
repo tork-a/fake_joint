@@ -1,0 +1,17 @@
+<launch>
+  <!-- load robot description  -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find fake_joint_driver)/robot/arm3.urdf.xacro'" />
+
+  <!-- fake_joint_driver_node -->
+  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node" output="screen"/> 
+
+  <!-- robot_state_publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
+
+  <!-- Load joint trajecotory controller -->
+  <rosparam file="$(find fake_joint_driver)/config/controllers.yaml" />
+  <node name="controller_spawner"
+	pkg="controller_manager" type="spawner" respawn="false" output="screen"
+	args="--shutdown-timeout 0.1 joint_state_controller joint_trajectory_controller"/> 
+
+</launch>

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="arm3">
+  <property name="M_PI" value="3.1415926535897931" />
+  <link name="arm3"/>
+  <joint name="JOINT1" type="revolute">
+    <origin xyz=" 0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm3"/>
+    <child link="SOLID1"/>
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="628.318530718"/>
+  </joint>
+  <link name="SOLID1">
+    <inertial>
+      <origin xyz=" 0.0 0.0 0.5"/>
+      <mass value="1"/>
+      <inertia ixx="1" iyy="1" izz="1" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz=" 0.0 0.0 0.5"/>
+      <geometry>
+        <cylinder length="1.0" radius="0.16"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 0.8 0.5"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="JOINT2" type="revolute">
+    <origin xyz="0.0 0.0 1.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="SOLID1"/>
+    <child link="SOLID2"/>
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="628.318530718"/>
+  </joint>
+  <link name="SOLID2">
+    <inertial>
+      <origin xyz="0.0 0.0 0.5"/>
+      <mass value="1"/>
+      <inertia ixx="1" iyy="1" izz="1" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.5"/>
+      <geometry>
+        <cylinder length="1.0" radius="0.1"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 0.8 0 0.5"/>
+      </material>
+    </visual>
+    <visual>
+      <origin rpy="${M_PI/2} 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.12"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <joint name="JOINT3" type="revolute">
+    <origin xyz="0.0 0.0 1.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="SOLID2"/>
+    <child link="SOLID3"/>
+    <limit effort="1000.0" lower="-3.14" upper="3.14" velocity="628.318530718"/>
+  </joint>
+  <link name="SOLID3">
+    <inertial>
+      <origin xyz="0.0 0.0 0.5"/>
+      <mass value="1"/>
+      <inertia ixx="1" iyy="1" izz="1" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.5"/>
+      <geometry>
+        <cylinder length="1.0" radius="0.1"/>
+      </geometry>
+      <material name="red">
+        <color rgba="0.8 0 0 0.5"/>
+      </material>
+    </visual>
+    <visual>
+      <origin rpy="0 ${M_PI/2} 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.12"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+  <joint name="FIXED" type="fixed">
+    <origin xyz="0.0 0.0 1.0"/>
+    <parent link="SOLID3"/>
+    <child link="FRAME0"/>
+  </joint>
+  <link name="FRAME0"/>
+</robot>
