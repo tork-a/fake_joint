@@ -7,6 +7,8 @@ faking a perfect joint controller. It can be used from ros_controllers
 such as JointTrajectoryController. You can check your own joint
 trajectories on rviz, without using Gazebo or others.
 
+![Screenshot](doc/fake_joint_driver.png)
+
 # Quick start
 
 ## launch the nodes
