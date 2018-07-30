@@ -13,43 +13,74 @@
 
 FakeJointDriver::FakeJointDriver(void)
 {
-  std::vector<std::string> joint_names;
-  ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
+  std::set<std::string> joint_set;
 
+  // Read parameters
+  pnh.getParam("use_robot_description", include_joints_, False);
+  pnh.getParam("include_joints", include_joints_);
+  pnh.getParam("exclude_joints", exclude_joints_);
+
+  for (auto i=0; i<include_joints_.size(); i++)
+  {
+    ROS_DEBUG_STREAM("include_joint[" << i << "]" << include_joints_[i]);
+  }
+  for (auto i=0; i<exclude_joints_.size(); i++)
+  {
+    ROS_DEBUG_STREAM("exclude_joint[" << i << "]" << exclude_joints_[i]);
+  }
   // Read all joints in robot_description
   urdf::Model urdf_model;
-  if (!urdf_model.initParam("robot_description")) {
-    ROS_ERROR("Failed to parse robot_description");
-    exit(0);
-  }
-  std::map<std::string, boost::shared_ptr<urdf::Joint> >::iterator iter;
-  for (iter=urdf_model.joints_.begin(); iter!=urdf_model.joints_.end(); iter++) {
-    urdf::Joint joint = *iter->second;
-    // remove fixed and unknown joints
-    if (joint.type != urdf::Joint::FIXED && joint.type != urdf::Joint::UNKNOWN) {
-      joint_names.push_back(joint.name);
+  if (urdf_model.initParam("robot_description"))
+  {
+    for (auto it=urdf_model.joints_.begin(); it!=urdf_model.joints_.end(); it++)
+    {
+      urdf::Joint joint = *it->second;
+      // remove fixed and unknown joints
+      if (joint.type == urdf::Joint::FIXED || joint.type == urdf::Joint::UNKNOWN)
+      {
+        continue;
+      }
+      joint_set.insert(joint.name);
     }
   }
-  // resize members
-  int joint_num = joint_names.size();
-  if (joint_num == 0) {
-    ROS_ERROR("No valid joints found");
-    exit(0);
-  }
-  cmd_dis.resize(joint_num);
-  act_dis.resize(joint_num);
-  act_vel.resize(joint_num);
-  act_eff.resize(joint_num);
-
-  for (int i = 0; i < joint_num; i++)
+  else
   {
-    ROS_INFO_STREAM("joint: " << joint_names[i]);
-    // connect and register the joint state interface
-    hardware_interface::JointStateHandle state_handle(joint_names[i], &act_dis[i], &act_vel[i], &act_eff[i]);
+    ROS_WARN("We cannot find the parameter robot_description.");    
+  }
+  // Include joints into joint_set
+  for (auto i=0; i< include_joints_.size(); i++)
+  {
+    joint_set.insert(include_joints_[i]);
+  }
+  // Exclude joints in joint_set
+  for (auto i=0; i< exclude_joints_.size(); i++)
+  {
+    joint_set.erase(exclude_joints_[i]);
+  }
+  // Convert to vector (joint_names_)
+  std::copy(joint_set.begin(), joint_set.end(), std::back_inserter(joint_names_));
+  // Check the emptyness of joints
+  if (joint_names_.size() == 0) {
+    ROS_ERROR("No joints is specified. Please use include_joints parameters.");
+    ros::shutdown();
+  }
+  // Resize members
+  cmd_dis.resize(joint_names_.size());
+  act_dis.resize(joint_names_.size());
+  act_vel.resize(joint_names_.size());
+  act_eff.resize(joint_names_.size());
+
+  // Create joint_state_interface and position_joint_interface
+  for (int i = 0; i< joint_names_.size(); i++)
+  {
+    ROS_INFO_STREAM("joint[" << i << "]:" << joint_names_[i]);
+    // Connect and register the joint_state_interface
+    hardware_interface::JointStateHandle state_handle(joint_names_[i], &act_dis[i], &act_vel[i], &act_eff[i]);
     joint_state_interface.registerHandle(state_handle);
 
-    // connect and register the position joint interface
-    hardware_interface::JointHandle pos_handle(joint_state_interface.getHandle(joint_names[i]), &cmd_dis[i]);
+    // Connect and register the position_joint_interface
+    hardware_interface::JointHandle pos_handle(joint_state_interface.getHandle(joint_names_[i]), &cmd_dis[i]);
     position_joint_interface.registerHandle(pos_handle);
   }
   registerInterface(&joint_state_interface);

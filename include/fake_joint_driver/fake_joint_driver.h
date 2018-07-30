@@ -20,6 +20,10 @@ private:
   std::vector<double> act_vel;
   std::vector<double> act_eff;
 
+  std::vector<std::string> joint_names_;
+  std::vector<std::string> include_joints_;
+  std::vector<std::string> exclude_joints_;
+
 public:
   FakeJointDriver(void);
   ~FakeJointDriver();
