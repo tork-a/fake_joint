@@ -1,8 +1,8 @@
 # fake_joint_driver
 
 This package contains a node to provide
-hardware_interface::PositionJointInterface, which simply loopback the
-command joint position to actual position. In other words, it is
+`hardware_interface::PositionJointInterface`, which simply loopback
+the command joint position to actual position. In other words, it is
 faking a perfect joint controller. It can be used from ros_controllers
 such as JointTrajectoryController. You can check your own joint
 trajectories on rviz, without using Gazebo or others.
@@ -45,6 +45,24 @@ $ rqt
 Choose Plugins->Robot tools->Joint trajectory controller to load the
 plugin.  Select controller manager and controller, then you can see
 sliders to set the joint trajectory goals.
+
+# Parameters
+
+- use_robot_description
+
+  When it is true, the driver read the parameter `/robot_description`
+  to obtain the joint list to control by this driver. When it is
+  false, you must specify the joint list by `include_joints`
+  parameters.
+
+- `include_joints`
+
+  This is the list of the joints which the driver node should control.
+
+- `exclude_joints`
+
+  This is the list of the joints which the driver node should not
+  control.
 
 # Caution
 
