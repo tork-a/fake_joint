@@ -17,7 +17,7 @@ FakeJointDriver::FakeJointDriver(void)
   std::set<std::string> joint_set;
 
   // Read parameters
-  pnh.getParam("use_robot_description", include_joints_, False);
+  pnh.param<bool>("use_robot_description", use_description_, true);
   pnh.getParam("include_joints", include_joints_);
   pnh.getParam("exclude_joints", exclude_joints_);
 
@@ -30,23 +30,26 @@ FakeJointDriver::FakeJointDriver(void)
     ROS_DEBUG_STREAM("exclude_joint[" << i << "]" << exclude_joints_[i]);
   }
   // Read all joints in robot_description
-  urdf::Model urdf_model;
-  if (urdf_model.initParam("robot_description"))
+  if (use_description_)
   {
-    for (auto it=urdf_model.joints_.begin(); it!=urdf_model.joints_.end(); it++)
+    urdf::Model urdf_model;
+    if (urdf_model.initParam("robot_description"))
     {
-      urdf::Joint joint = *it->second;
-      // remove fixed and unknown joints
-      if (joint.type == urdf::Joint::FIXED || joint.type == urdf::Joint::UNKNOWN)
+      for (auto it=urdf_model.joints_.begin(); it!=urdf_model.joints_.end(); it++)
       {
-        continue;
+        urdf::Joint joint = *it->second;
+        // remove fixed and unknown joints
+        if (joint.type == urdf::Joint::FIXED || joint.type == urdf::Joint::UNKNOWN)
+        {
+          continue;
+        }
+        joint_set.insert(joint.name);
       }
-      joint_set.insert(joint.name);
     }
-  }
-  else
-  {
-    ROS_WARN("We cannot find the parameter robot_description.");    
+    else
+    {
+      ROS_WARN("We cannot find the parameter robot_description.");    
+    }
   }
   // Include joints into joint_set
   for (auto i=0; i< include_joints_.size(); i++)

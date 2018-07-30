@@ -20,11 +20,9 @@ import unittest
 class TestFakeJointDriver(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        rospy.init_node('test_joint_trajectory_controller_node')
+        rospy.init_node('test_fake_joint_driver_node')
 
     def setUp(self):
-        self.joint_states_list = []
-
         rospy.Subscriber('joint_states',
                          JointState, self.cb_joint_states, queue_size=10)
         self.joint_states = rospy.wait_for_message(
@@ -39,7 +37,7 @@ class TestFakeJointDriver(unittest.TestCase):
             'joint_trajectory_controller/follow_joint_trajectory',
             FollowJointTrajectoryAction)
 
-        self.client.wait_for_server(timeout=10.0)
+        self.client.wait_for_server(timeout=rospy.Duration(10.0))
         
     def cb_joint_states(self, msg):
         self.joint_states = msg
