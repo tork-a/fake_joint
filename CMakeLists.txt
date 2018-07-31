@@ -36,6 +36,10 @@ install(TARGETS fake_joint_driver_node
 install(DIRECTORY config robot test
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
+catkin_install_python(
+  PROGRAMS test/test_fake_joint_driver.py
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/test)
+
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
