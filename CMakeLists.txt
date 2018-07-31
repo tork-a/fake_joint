@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   controller_manager
   roscpp
   urdf
+  xacro
 )
 
 # catkin_python_setup()
@@ -32,7 +33,7 @@ install(TARGETS fake_joint_driver_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY config test
+install(DIRECTORY config robot test
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 install(DIRECTORY include/${PROJECT_NAME}/

@@ -18,8 +18,12 @@
   <depend>controller_manager</depend>
   <depend>urdf</depend>
   <depend>roscpp</depend>
+  <depend>xacro</depend>
   <test_depend>roslint</test_depend>
   <test_depend>rostest</test_depend>
+  <test_depend>robot_state_publisher</test_depend>
+  <test_depend>joint_state_controller</test_depend>
+  <test_depend>joint_trajectory_controller</test_depend>
 
   <export></export>
   
