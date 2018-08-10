@@ -1,0 +1,31 @@
+<launch>
+  <!-- load robot description  -->
+  <param name="robot_description"
+	 command="$(find xacro)/xacro --inorder '$(find fake_joint_driver)/robot/arm3.urdf.xacro'" />
+
+  <!-- fake_joint_driver_node -->
+  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node">
+    <rosparam param="include_joints">[dummy_a, dummy_b]</rosparam>
+    <rosparam param="exclude_joints">[dummy_a]</rosparam>
+  </node>
+
+  <!-- robot_state_publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Load joint trajecotory controller -->
+  <rosparam file="$(find fake_joint_driver)/config/controllers.yaml" />
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+	respawn="false"
+	args="joint_state_controller joint_trajectory_controller"/>
+
+  <!-- Run tests -->
+  <test test-name="nextage_hztest" pkg="rostest" type="hztest">
+    <param name="topic" value="joint_states"/>
+    <param name="hz" value="50"/>
+    <param name="hzerror" value="10"/>
+    <param name="test_duration" value="5.0"/>  
+  </test>
+  <test test-name="test_fake_joint_driver" pkg="fake_joint_driver" type="test_fake_joint_driver.py"/>
+
+</launch>
+

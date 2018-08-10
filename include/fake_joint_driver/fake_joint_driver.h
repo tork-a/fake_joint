@@ -21,6 +21,7 @@ private:
   std::vector<double> act_eff;
 
   std::vector<std::string> joint_names_;
+  bool use_description_;
   std::vector<std::string> include_joints_;
   std::vector<std::string> exclude_joints_;
 

@@ -22,14 +22,14 @@ int main(int argc, char **argv)
   controller_manager::ControllerManager cm(&robot, nh);
 
   // Set spin ratge
-  ros::Rate rate(1.0 / ros::Duration(0.050).toSec());
+  ros::Rate rate(1.0 / ros::Duration(0.010).toSec());
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
   while (ros::ok())
   {
     robot.update();
-    cm.update(ros::Time::now(), ros::Duration(0.050));
+    cm.update(ros::Time::now(), ros::Duration(0.010));
     rate.sleep();
   }
   spinner.stop();
