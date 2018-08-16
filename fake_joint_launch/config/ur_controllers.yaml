@@ -1,0 +1,49 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - shoulder_pan_joint
+    - shoulder_lift_joint
+    - elbow_joint
+    - wrist_1_joint
+    - wrist_2_joint
+    - wrist_3_joint
+
+shoulder_pan_joint_position_controller:
+  type: position_controllers/JointPositionController
+  publish_rate: 50
+  base_frame_id: base_link
+  joint : shoulder_pan_joint
+
+shoulder_lift_joint_position_controller:
+  type: position_controllers/JointPositionController
+  publish_rate: 50
+  base_frame_id: base_link
+  joint : shoulder_lift_joint
+
+elbow_joint_position_controller:
+  type: position_controllers/JointPositionController
+  publish_rate: 50
+  base_frame_id: base_link
+  joint : elbow_joint
+
+wrist_1_joint_position_controller:
+  type: position_controllers/JointPositionController
+  publish_rate: 50
+  base_frame_id: base_link
+  joint : wrist_1_joint
+
+wrist_2_joint_position_controller:
+  type: position_controllers/JointPositionController
+  publish_rate: 50
+  base_frame_id: base_link
+  joint : wrist_2_joint
+
+wrist_3_joint_position_controller:
+  type: position_controllers/JointPositionController
+  publish_rate: 50
+  base_frame_id: base_link
+  joint : wrist_3_joint

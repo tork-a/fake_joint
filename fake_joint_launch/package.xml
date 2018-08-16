@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>fake_joint_launch</name>
+  <version>0.0.0</version>
+  <description>Collection of the launch files for fake_joint_driver</description>
+
+  <maintainer email="dev@opensource-robotics.tokyo.jp">Tokyo Opensource Robotics Kyokai (TORK) Developer Team</maintainer>
+
+  <license>Apache License 2.0</license>
+
+  <url type="website">http://wiki.ros.org/fake_joint_launch</url>
+  <author email="ryosuke.tajima@opensource-robotics.tokyo.jp">Ryosuke Tajima</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>fake_joint_driver</depend>
+
+  <export></export>
+  
+</package>

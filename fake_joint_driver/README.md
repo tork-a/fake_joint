@@ -1,11 +1,11 @@
-# fake_joint_driver
+# fake_joint_driver [![Build Status](https://travis-ci.org/tork-a/fake_joint_driver.svg?branch=master)](https://travis-ci.org/tork-a/fake_joint_driver)
 
 This package contains a node to provide
 `hardware_interface::PositionJointInterface`, which simply loopback
-the command joint position to actual position. In other words, it is
-faking a perfect joint controller. It can be used from ros_controllers
-such as JointTrajectoryController. You can check your own joint
-trajectories on rviz, without using Gazebo or others.
+the command joint position to the actual position. In other words, it
+is faking a perfect joint controller. It can be used from
+ros_controllers such as JointTrajectoryController. You can check your
+own joint trajectories on rviz, without using Gazebo or others.
 
 ![Screenshot](doc/fake_joint_driver.png)
 
