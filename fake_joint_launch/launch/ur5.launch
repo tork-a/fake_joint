@@ -1,6 +1,6 @@
 <launch>
-  <arg name="use_rviz" value="true"/>
-  <arg name="use_rqt" value="false"/>
+  <arg name="use_rviz" default="true"/>
+  <arg name="use_rqt" default="false"/>
   
   <!-- load robot description  -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur5_robot.urdf.xacro'" />
