@@ -2,8 +2,8 @@
 Changelog for package fake_joint_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.1 (2018-08-16)
+------------------
 * Add README and image
 * Add abb_irb2400 settings
 * Add pr2 settings
