@@ -1,5 +1,8 @@
 /**
  * @file fake_joint_driver.h
+ * @author Ryosuke Tajima
+ * @copyright 2016, 2017, Tokyo Opensource Robotics Kyokai Association
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
  *
  * FakeJointDriver class (only do loopback from command to status)
  * derived from the hardware_interface class

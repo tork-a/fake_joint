@@ -1,6 +1,9 @@
 /**
  * @file fake_joint_driver_node.cpp
- * 
+ * @author Ryosuke Tajima
+ * @copyright 2016, 2017, Tokyo Opensource Robotics Kyokai Association
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
+ *
  * Device driver node to fake loopback joints.
  */
 #include "ros/ros.h"
