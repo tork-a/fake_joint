@@ -3,6 +3,8 @@ project(fake_joint_launch)
 
 find_package(catkin REQUIRED COMPONENTS
   fake_joint_driver
+  rostest
+  roslaunch
 )
 
 catkin_package(
@@ -19,10 +21,10 @@ install(DIRECTORY launch config
 )
 
 if(CATKIN_ENABLE_TESTING)
-  find_package(catkin REQUIRED COMPONENTS rostest roslaunch)
   file(GLOB LAUNCH_FILES launch/*.launch)
   foreach(LAUNCH_FILE ${LAUNCH_FILES})
     message(STATUS "Testing ${LAUNCH_FILE}")
     roslaunch_add_file_check(${LAUNCH_FILE})
   endforeach()
 endif()
+

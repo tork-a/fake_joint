@@ -12,9 +12,16 @@
   <author email="ryosuke.tajima@opensource-robotics.tokyo.jp">Ryosuke Tajima</author>
 
   <buildtool_depend>catkin</buildtool_depend>
+
   <depend>fake_joint_driver</depend>
-  <depend>ur_description</depend>
-  <depend>tra1_description</depend>
+  <depend>roslaunch</depend>
+  <depend>rostest</depend>
+
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>ur_description</exec_depend>
+  <exec_depend>tra1_description</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
 
   <export></export>
   
