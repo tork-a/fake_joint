@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
   controller_manager
   roscpp
+  roslaunch
+  rostest
   urdf
   xacro
 )
@@ -14,7 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
 # catkin_python_setup()
 
 catkin_package(
-  CATKIN_DEPENDS hardware_interface position_controllers roscpp
+  CATKIN_DEPENDS hardware_interface roscpp
   INCLUDE_DIRS include
 )
 
@@ -49,9 +51,6 @@ if(CATKIN_ENABLE_TESTING)
   set(ROSLINT_PYTHON_OPTS "--max-line-length=180")
   roslint_cpp(src/fake_joint_driver.cpp src/fake_joint_driver_node.cpp)
   # add_dependencies(tests roslint)
-
-  find_package(roslaunch REQUIRED)
-  find_package(rostest REQUIRED)
   file(GLOB LAUNCH_FILES launch/*.launch)
   foreach(LAUNCH_FILE ${LAUNCH_FILES})
     message(STATUS "Testing ${LAUNCH_FILE}")
