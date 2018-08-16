@@ -1,0 +1,37 @@
+<launch>
+  <arg name="use_rviz" default="true"/>
+  <arg name="use_rqt" default="false"/>
+  
+  <!-- load robot description  -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find abb_irb2400_support)/urdf/irb2400.xacro'" />
+
+  <!-- fake_joint_driver_node -->
+  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node"/>
+  
+  <!-- robot_state_publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <rosparam file="$(find fake_joint_launch)/config/abb_irb2400_controllers.yaml" />
+
+  <!-- Load and start joint trajecotory controller -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" args="joint_state_controller position_trajectory_controller"/>
+
+  <!-- Launch rviz -->
+  <node if="$(arg use_rviz)"
+	name="rviz" pkg="rviz" type="rviz"
+	args="-d $(find fake_joint_launch)/launch/fake_joint_launch.rviz"/>
+
+  <!-- Launch rqt joint_trajectory_controller -->
+  <node if="$(arg use_rqt)"
+	name="rqt" pkg="rqt_gui" type="rqt_gui"
+	args="-s rqt_joint_trajectory_controller.joint_trajectory_controller.JointTrajectoryController"/>
+
+  <!-- Run tests -->
+  <test test-name="hztest" pkg="rostest" type="hztest">
+    <param name="topic" value="joint_states"/>
+    <param name="hz" value="50"/>
+    <param name="hzerror" value="10"/>
+    <param name="test_duration" value="5.0"/>  
+  </test>
+
+</launch>

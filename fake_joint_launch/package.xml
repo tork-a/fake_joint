@@ -17,6 +17,7 @@
   <depend>roslaunch</depend>
   <depend>rostest</depend>
 
+  <exec_depend>abb_irb2400_support</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>denso_ros_control</exec_depend>
   <exec_depend>nextage_description</exec_depend>
