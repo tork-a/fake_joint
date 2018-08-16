@@ -1,0 +1,53 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+larm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - LARM_JOINT0
+    - LARM_JOINT1
+    - LARM_JOINT2
+    - LARM_JOINT3
+    - LARM_JOINT4
+    - LARM_JOINT5
+
+rarm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - RARM_JOINT0
+    - RARM_JOINT1
+    - RARM_JOINT2
+    - RARM_JOINT3
+    - RARM_JOINT4
+    - RARM_JOINT5
+
+torso_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - CHEST_JOINT0
+
+head_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - HEAD_JOINT0
+    - HEAD_JOINT1
+
+fullbody_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - CHEST_JOINT0
+    - HEAD_JOINT0
+    - HEAD_JOINT1
+    - RARM_JOINT0
+    - RARM_JOINT1
+    - RARM_JOINT2
+    - RARM_JOINT3
+    - RARM_JOINT4
+    - RARM_JOINT5
+    - LARM_JOINT0
+    - LARM_JOINT1
+    - LARM_JOINT2
+    - LARM_JOINT3
+    - LARM_JOINT4
+    - LARM_JOINT5
