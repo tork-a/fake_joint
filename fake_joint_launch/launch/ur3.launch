@@ -11,7 +11,7 @@
   <!-- robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
-  <rosparam file="$(find fake_joint_driver_launch)/config/ur_controllers.yaml" />
+  <rosparam file="$(find fake_joint_launch)/config/ur_controllers.yaml" />
 
   <!-- Load and start joint trajecotory controller -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" args="joint_state_controller arm_controller"/>
@@ -21,7 +21,7 @@
   <!-- Launch rviz -->
   <node if="$(arg use_rviz)"
 	name="rviz" pkg="rviz" type="rviz"
-	args="-d $(find fake_joint_driver_launch)/launch/fake_joint_driver_launch.rviz"/>
+	args="-d $(find fake_joint_launch)/launch/fake_joint_launch.rviz"/>
 
   <!-- Launch rqt joint_trajectory_controller -->
   <node if="$(arg use_rqt)"
@@ -35,5 +35,5 @@
     <param name="hzerror" value="10"/>
     <param name="test_duration" value="5.0"/>  
   </test>
-  <test test-name="test_fake_joint_driver" pkg="fake_joint_driver_launch" type="test_fake_joint_driver.py"/>
+
 </launch>

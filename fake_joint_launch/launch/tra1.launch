@@ -1,9 +1,9 @@
 <launch>
-  <arg name="use_rviz" value="true"/>
-  <arg name="use_rqt" value="false"/>
+  <arg name="use_rviz" default="true"/>
+  <arg name="use_rqt" default="false"/>
   
   <!-- load robot description  -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur5_robot.urdf.xacro'" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find tra1_description)/urdf/tra1.xacro'" />
 
   <!-- fake_joint_driver_node -->
   <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node"/>
@@ -11,10 +11,10 @@
   <!-- robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
-  <!-- Load joint trajecotory controller -->
-  <rosparam file="$(find fake_joint_launch)/config/ur_controllers.yaml" />
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-	respawn="false" args="joint_state_controller arm_controller"/>
+  <rosparam file="$(find fake_joint_launch)/config/tra1_controllers.yaml" />
+
+  <!-- Load and start joint trajecotory controller -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" args="joint_state_controller position_trajectory_controller"/>
 
   <!-- Launch rviz -->
   <node if="$(arg use_rviz)"
