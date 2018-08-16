@@ -20,6 +20,7 @@
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>denso_ros_control</exec_depend>
   <exec_depend>nextage_description</exec_depend>
+  <exec_depend>pr2_description</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>tra1_description</exec_depend>
