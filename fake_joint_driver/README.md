@@ -1,4 +1,4 @@
-# fake_joint_driver [![Build Status](https://travis-ci.org/tork-a/fake_joint_driver.svg?branch=master)](https://travis-ci.org/tork-a/fake_joint_driver)
+# fake_joint_driver
 
 This package contains a node to provide
 `hardware_interface::PositionJointInterface`, which simply loopback
