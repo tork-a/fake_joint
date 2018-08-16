@@ -13,6 +13,8 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>fake_joint_driver</depend>
+  <depend>ur_description</depend>
+  <depend>tra1_description</depend>
 
   <export></export>
   
