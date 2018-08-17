@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>fake_joint</name>
+  <version>0.0.0</version>
+  <description>
+    This metapackage depends on fake-joint related package for ros_control.
+  </description>
+  <author email="ryosuke.tajima@opensource-robotics.tokyo.jp">Ryosuke Tajima</author>
+  <maintainer email="dev@opensource-robotics.tokyo.jp">Tokyo Opensource Robotics Kyokai (TORK) Developer Team</maintainer>
+  <license>Apache License 2.0</license>
+
+  <url type="website">http://wiki.ros.org/fake_joint</url>
+  <url type="repository">https://github.com/tork-a/fake_joint</url>
+  <url type="bugtracker">https://github.com/tork-a/fake_joint/issues</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>fake_joint_driver</exec_depend>
+  <exec_depend>fake_joint_launch</exec_depend>  
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
