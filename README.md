@@ -37,22 +37,45 @@ interface like joint trajectory action, so you can use MoveIt! on it.
 
 ![UR5 fake_joint](image/ur5_fake.png)
 
+To use just fake driver and rqt plugin:
+
 ```
 $ roslaunch fake_joint_launch ur3.launch use_rqt:=true
+```
+
+To use fake driver and MoveIt!:
+
+```
+$ roslaunch fake_joint_launch ur3.launch use_rviz:=false
+$ roslaunch ur3_moveit_config ur3_moveit_planning_execution.launch sim:=true
+$ roslaunch ur3_moveit_config moveit_rviz.launch config:=true
 ```
 
 ### TRA1
 
 ![TRA1 fake_joint](image/tra1_fake.png)
 
+To use just fake driver and rqt plugin:
+
 ```
 $ roslaunch fake_joint_launch tra1.launch use_rqt:=true
+```
+
+To use fake driver and MoveIt!:
+
+```
+$ roslaunch fake_joint_launch tra1.launch use_rviz:=false
+$ roslaunch tra1_bringup tra1_moveit.launch
 ```
 
 ### PR2
 
 ![PR2 fake_joint](image/pr2_fake.png)
 
+To use just fake driver and rqt plugin:
+
 ```
 $ roslaunch fake_joint_launch pr2.launch use_rqt:=true
 ```
+
+I can't find MoveIt! files for actual robot :-(
