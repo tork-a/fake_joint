@@ -5,9 +5,18 @@
   <!-- load robot description  -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find nextage_description)/urdf/NextageOpen.urdf'" />
 
+  <remap from="/larm_controller/follow_joint_trajectory"
+	 to="/larm_controller/follow_joint_trajectory_action"/>
+  <remap from="/rarm_controller/follow_joint_trajectory"
+	 to="/rarm_controller/follow_joint_trajectory_action"/>
+  <remap from="/head_controller/follow_joint_trajectory"
+	 to="/head_controller/follow_joint_trajectory_action"/>
+  <remap from="/torso_controller/follow_joint_trajectory"
+	 to="/torso_controller/follow_joint_trajectory_action"/>
+
   <!-- fake_joint_driver_node -->
-  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node"/>
-  
+  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node">
+  </node>
   <!-- robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
