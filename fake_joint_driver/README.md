@@ -48,7 +48,7 @@ sliders to set the joint trajectory goals.
 
 # Parameters
 
-- use_robot_description
+- `use_robot_description`
 
   When it is true, the driver read the parameter `/robot_description`
   to obtain the joint list to control by this driver. When it is
@@ -63,6 +63,21 @@ sliders to set the joint trajectory goals.
 
   This is the list of the joints which the driver node should not
   control.
+
+- `start_position`
+
+  This is a map to specify the initial position of the joint. You can
+  use this to avoid collision in zero joint angle.
+  
+  Use like:
+  
+  ```
+  <!-- fake_joint_driver_node -->
+  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node">
+    <!-- Set joint start position -->
+    <rosparam param="start_position">{LARM_JOINT2: -1.7, RARM_JOINT2: -1.7}</rosparam>
+  </node>
+  ```
 
 # Caution
 

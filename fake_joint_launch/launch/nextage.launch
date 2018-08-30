@@ -16,6 +16,8 @@
 
   <!-- fake_joint_driver_node -->
   <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node">
+    <!-- Set joint start position -->
+    <rosparam param="start_position">{LARM_JOINT2: -1.7, RARM_JOINT2: -1.7}</rosparam>
   </node>
   <!-- robot_state_publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
