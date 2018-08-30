@@ -17,11 +17,18 @@ FakeJointDriver::FakeJointDriver(void)
 {
   ros::NodeHandle pnh("~");
   std::set<std::string> joint_set;
+  std::map<std::string, double> start_position_map;
 
   // Read parameters
   pnh.param<bool>("use_robot_description", use_description_, true);
   pnh.getParam("include_joints", include_joints_);
   pnh.getParam("exclude_joints", exclude_joints_);
+  pnh.getParam("start_position", start_position_map);
+
+  for (auto it=start_position_map.begin(); it!=start_position_map.end(); it++)
+  {
+    ROS_DEBUG_STREAM("start_position: " << it->first << ": " << it->second);
+  }
 
   for (auto i=0; i<include_joints_.size(); i++)
   {
@@ -76,10 +83,23 @@ FakeJointDriver::FakeJointDriver(void)
   act_vel.resize(joint_names_.size());
   act_eff.resize(joint_names_.size());
 
+  // Set start position
+  for (auto it=start_position_map.begin(); it!=start_position_map.end(); it++)
+  {
+    for (auto i=0; i<joint_names_.size(); i++)
+    {
+      if (joint_names_[i] == it->first)
+      {
+        act_dis[i] = it->second;
+        cmd_dis[i] = it->second;
+      }
+    }
+  }
+
   // Create joint_state_interface and position_joint_interface
   for (int i = 0; i< joint_names_.size(); i++)
   {
-    ROS_INFO_STREAM("joint[" << i << "]:" << joint_names_[i]);
+    ROS_DEBUG_STREAM("joint[" << i << "]:" << joint_names_[i]);
     // Connect and register the joint_state_interface
     hardware_interface::JointStateHandle state_handle(joint_names_[i], &act_dis[i], &act_vel[i], &act_eff[i]);
     joint_state_interface.registerHandle(state_handle);
