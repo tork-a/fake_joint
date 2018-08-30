@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>fake_joint</name>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <description>
     This metapackage depends on fake-joint related package for ros_control.
   </description>

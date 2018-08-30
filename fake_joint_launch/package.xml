@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>fake_joint_launch</name>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <description>Collection of the launch files for fake_joint_driver.</description>
   <author email="ryosuke.tajima@opensource-robotics.tokyo.jp">Ryosuke Tajima</author>
   <maintainer email="dev@opensource-robotics.tokyo.jp">Tokyo Opensource Robotics Kyokai (TORK) Developer Team</maintainer>

@@ -2,8 +2,8 @@
 Changelog for package fake_joint_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.3 (2018-08-31)
+------------------
 * Add start_position parameter (`#3 <https://github.com/tork-a/fake_joint/issues/3>`_)
   - Set start position of Nextage Open
 * Add remap of action name for nextage.launch

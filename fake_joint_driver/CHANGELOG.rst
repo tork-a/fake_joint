@@ -2,8 +2,8 @@
 Changelog for package fake_joint_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.3 (2018-08-31)
+------------------
 * Add start_position parameter(`#3 <https://github.com/tork-a/fake_joint/issues/3>`_)
 * 0.0.2
 * Add fake_joint meta-package
