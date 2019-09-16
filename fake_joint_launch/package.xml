@@ -27,7 +27,6 @@
   <exec_depend>rviz</exec_depend>
   <exec_depend>tra1_description</exec_depend>
   <exec_depend>ur_description</exec_depend>
-  <exec_depend>vs060</exec_depend>
 
   <export></export>
   
