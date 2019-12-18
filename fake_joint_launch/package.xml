@@ -23,7 +23,6 @@
   <exec_depend>pr2_description</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz</exec_depend>
-  <exec_depend>ur_description</exec_depend>
 
   <export></export>
   
