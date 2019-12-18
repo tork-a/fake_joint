@@ -2,8 +2,8 @@
 Changelog for package fake_joint_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.4 (2019-12-18)
+------------------
 * Changes for melodic release (`#4 <https://github.com/tork-a/fake_joint/issues/4>`_)
   - Add melodic entries for travis.yml
   - Remove and rename files which is not supported by current Melodic release
