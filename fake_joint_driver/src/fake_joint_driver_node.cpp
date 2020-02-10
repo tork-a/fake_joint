@@ -6,34 +6,35 @@
  *
  * Device driver node to fake loopback joints.
  */
-#include "controller_manager/controller_manager.h"
-#include "fake_joint_driver/fake_joint_driver.h"
-#include "ros/ros.h"
+#include <controller_manager/controller_manager.hpp>
+#include <fake_joint_driver/fake_joint_driver.h>
+#include <rclcpp/rclcpp.hpp>
 
 /**
  * @brief Main function
  */
 int main(int argc, char **argv) {
   // Init ROS node
-  ros::init(argc, argv, "fake_joint_driver");
-  ros::NodeHandle nh;
+  rclcpp::init(argc, argv);
+  std::vector<std::string> non_ros_args = rclcpp::remove_ros_arguments(argc, argv);
+
+  auto node = rclcpp::Node::make_shared("fake_joint_driver_node");
 
   // Create hardware interface
-  FakeJointDriver robot;
-  // Connect to controller manager
-  controller_manager::ControllerManager cm(&robot, nh);
-
+  auto robot = std::make_shared<FakeJointDriver>(node, non_ros_args.at(1));
   // Set spin ratge
-  ros::Rate rate(1.0 / ros::Duration(0.010).toSec());
-  ros::AsyncSpinner spinner(1);
-  spinner.start();
+  rclcpp::Rate rate(1.0 / rclcpp::Duration(0.010).seconds());
+  auto executor = rclcpp::executors::MultiThreadedExecutor::make_shared();
+  executor->add_node(node);
+  // Connect to controller manager
+  controller_manager::ControllerManager cm(robot, executor);
 
-  while (ros::ok()) {
-    robot.update();
-    cm.update(ros::Time::now(), ros::Duration(0.010));
+  while (rclcpp::ok())
+  {
+    robot->update();
+    cm.update();
     rate.sleep();
   }
-  spinner.stop();
 
   return 0;
 }

@@ -7,15 +7,18 @@
  * FakeJointDriver class (only do loopback from command to status)
  * derived from the hardware_interface class
  */
-#include <hardware_interface/joint_command_interface.h>
-#include <hardware_interface/joint_state_interface.h>
-#include <hardware_interface/robot_hw.h>
+#include <rclcpp/rclcpp.hpp>
 
-class FakeJointDriver : public hardware_interface::RobotHW {
+#include <hardware_interface/joint_command_handle.hpp>
+#include <hardware_interface/joint_state_handle.hpp>
+#include <hardware_interface/robot_hardware.hpp>
+
+class FakeJointDriver : public hardware_interface::RobotHardware
+{
 private:
-  hardware_interface::JointStateInterface joint_state_interface;
-  hardware_interface::PositionJointInterface position_joint_interface;
-  hardware_interface::VelocityJointInterface velocity_joint_interface;
+  hardware_interface::JointStateHandle joint_state_interface;
+  // hardware_interface::PositionJointInterface position_joint_interface;
+  // hardware_interface::VelocityJointInterface velocity_joint_interface;
 
   std::vector<double> cmd_dis;
   std::vector<double> act_dis;
@@ -28,7 +31,19 @@ private:
   std::vector<std::string> exclude_joints_;
 
 public:
-  FakeJointDriver(void);
+  FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std::string& robot_description_file_path);
   ~FakeJointDriver();
-  void update(void);
+  hardware_interface::hardware_interface_ret_t init() override
+  {
+    return hardware_interface::HW_RET_OK;
+  }
+  void update();
+  hardware_interface::hardware_interface_ret_t read() override
+  {
+    return hardware_interface::HW_RET_OK;
+  }
+  hardware_interface::hardware_interface_ret_t write() override
+  {
+    return hardware_interface::HW_RET_OK;
+  }
 };
