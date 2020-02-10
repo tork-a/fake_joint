@@ -12,22 +12,24 @@
   <url type="repository">https://github.com/tork-a/fake_joint</url>
   <url type="bugtracker">https://github.com/tork-a/fake_joint/issues</url>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>controller_manager</depend>
   <depend>hardware_interface</depend>
-  <depend>roscpp</depend>
-  <depend>roslaunch</depend>
+  <depend>rclcpp</depend>
+  <!-- <depend>roslaunch</depend> -->
   <depend>urdf</depend>
   <depend>xacro</depend>
 
-  <test_depend>roslint</test_depend>
-  <test_depend>rostest</test_depend>
+  <!-- <test_depend>roslint</test_depend> -->
+  <!-- <test_depend>rostest</test_depend> -->
   <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>joint_state_controller</exec_depend>
-  <exec_depend>joint_trajectory_controller</exec_depend>
-  <exec_depend>position_controllers</exec_depend>
+  <!-- <exec_depend>joint_state_controller</exec_depend> -->
+  <exec_depend>ros_controllers</exec_depend>
+  <!-- <exec_depend>position_controllers</exec_depend> -->
 
-  <export></export>
-  
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+
 </package>
