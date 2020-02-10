@@ -6,15 +6,14 @@
  *
  * Device driver node to fake loopback joints.
  */
-#include "ros/ros.h"
 #include "controller_manager/controller_manager.h"
 #include "fake_joint_driver/fake_joint_driver.h"
+#include "ros/ros.h"
 
 /**
  * @brief Main function
  */
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   // Init ROS node
   ros::init(argc, argv, "fake_joint_driver");
   ros::NodeHandle nh;
@@ -29,8 +28,7 @@ int main(int argc, char **argv)
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
-  while (ros::ok())
-  {
+  while (ros::ok()) {
     robot.update();
     cm.update(ros::Time::now(), ros::Duration(0.010));
     rate.sleep();

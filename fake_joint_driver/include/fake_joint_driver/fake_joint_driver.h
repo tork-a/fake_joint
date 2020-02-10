@@ -11,8 +11,7 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
-class FakeJointDriver : public hardware_interface::RobotHW
-{
+class FakeJointDriver : public hardware_interface::RobotHW {
 private:
   hardware_interface::JointStateInterface joint_state_interface;
   hardware_interface::PositionJointInterface position_joint_interface;
