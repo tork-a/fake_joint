@@ -10,25 +10,52 @@
 #include <fake_joint_driver/fake_joint_driver.h>
 #include <rclcpp/rclcpp.hpp>
 
+static const rclcpp::Logger LOGGER = rclcpp::get_logger("fake_joint_driver");
+
+void spin(std::shared_ptr<rclcpp::executors::MultiThreadedExecutor> exe)
+{
+  exe->spin();
+}
+
 /**
  * @brief Main function
  */
 int main(int argc, char **argv) {
   // Init ROS node
   rclcpp::init(argc, argv);
-  std::vector<std::string> non_ros_args = rclcpp::remove_ros_arguments(argc, argv);
-
-  auto node = rclcpp::Node::make_shared("fake_joint_driver_node");
-
+  auto executor = std::make_shared<rclcpp::executors::MultiThreadedExecutor>();
   // Create hardware interface
-  auto robot = std::make_shared<FakeJointDriver>(node, non_ros_args.at(1));
-  // Set spin ratge
-  rclcpp::Rate rate(1.0 / rclcpp::Duration(0.010).seconds());
-  auto executor = rclcpp::executors::MultiThreadedExecutor::make_shared();
-  executor->add_node(node);
+  auto robot = std::make_shared<FakeJointDriver>(rclcpp::Node::make_shared("fake_joint_driver_node"));
+
   // Connect to controller manager
   controller_manager::ControllerManager cm(robot, executor);
 
+  cm.load_controller("ros_controllers", "ros_controllers::JointStateController", "fake_joint_state_controller");
+  cm.load_controller("ros_controllers", "ros_controllers::JointTrajectoryController",
+                     "fake_joint_trajectory_controller");
+
+  // there is no async spinner in ROS 2, so we have to put the spin() in its own thread
+  auto future_handle = std::async(std::launch::async, spin, executor);
+
+  // we can either configure each controller individually through its services
+  // or we use the controller manager to configure every loaded controller
+  if (cm.configure() != controller_interface::CONTROLLER_INTERFACE_RET_SUCCESS)
+  {
+    RCLCPP_ERROR(LOGGER, "at least one controller failed to configure");
+    return -1;
+  }
+  RCLCPP_INFO(LOGGER, "Successfully configured all controllers");
+
+  // and activate all controller
+  if (cm.activate() != controller_interface::CONTROLLER_INTERFACE_RET_SUCCESS)
+  {
+    RCLCPP_ERROR(LOGGER, "At least one controller failed to activate");
+    return -1;
+  }
+  RCLCPP_INFO(LOGGER, "Successfully activated all controllers");
+
+  // Set spin rate
+  rclcpp::Rate rate(1.0 / rclcpp::Duration(0.010).seconds());
   while (rclcpp::ok())
   {
     robot->update();

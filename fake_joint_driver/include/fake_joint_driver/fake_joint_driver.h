@@ -16,14 +16,15 @@
 class FakeJointDriver : public hardware_interface::RobotHardware
 {
 private:
-  hardware_interface::JointStateHandle joint_state_interface;
-  // hardware_interface::PositionJointInterface position_joint_interface;
-  // hardware_interface::VelocityJointInterface velocity_joint_interface;
+  std::vector<hardware_interface::JointStateHandle> joint_state_handles_;
+  std::vector<hardware_interface::JointCommandHandle> joint_command_handles_;
+  std::vector<hardware_interface::OperationModeHandle> joint_mode_handles_;
 
   std::vector<double> cmd_dis;
   std::vector<double> act_dis;
   std::vector<double> act_vel;
   std::vector<double> act_eff;
+  std::vector<hardware_interface::OperationMode> op_mode;
 
   std::vector<std::string> joint_names_;
   bool use_description_;
@@ -31,7 +32,7 @@ private:
   std::vector<std::string> exclude_joints_;
 
 public:
-  FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std::string& robot_description_file_path);
+  FakeJointDriver(const rclcpp::Node::SharedPtr& node);
   ~FakeJointDriver();
   hardware_interface::hardware_interface_ret_t init() override
   {

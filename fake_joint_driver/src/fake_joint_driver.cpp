@@ -15,64 +15,7 @@
 
 static const rclcpp::Logger LOGGER = rclcpp::get_logger("fake_joint_driver");
 
-template <typename ParameterT>
-bool getParameterAsMap(const rclcpp::Node::SharedPtr& node, const std::string& prefix,
-                       const std::array<std::string, 2>& first_second_names,
-                       std::map<std::string, ParameterT>& param_map)
-{
-  /*
-    start_position:
-      joints:
-        - panda_joint1
-        - panda_joint2
-        - panda_joint3
-        - panda_joint4
-        - panda_joint5
-        - panda_joint6
-        - panda_joint7
-      values:
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-        - 0.0
-   */
-  rclcpp::Parameter param_keys;
-  rclcpp::Parameter param_values;
-  std::string current_parameter = prefix + "." + first_second_names.at(0);
-  if (node->get_parameter(current_parameter, param_keys))
-  {
-    current_parameter = prefix + "." + first_second_names.at(1);
-    if (node->get_parameter(current_parameter, param_values))
-    {
-      if (param_keys.get_type() != rclcpp::ParameterType::PARAMETER_STRING_ARRAY)
-      {
-        RCLCPP_ERROR(LOGGER, "Parameter have to be array of strings");
-        return false;
-      }
-      std::vector<std::string> keys = param_keys.as_string_array();
-      std::vector<ParameterT> values = param_values.get_value<std::vector<ParameterT>>();
-      if (keys.size() != values.size())
-      {
-        // TODO(JafarAbdi): Complete :D
-        RCLCPP_ERROR_STREAM(LOGGER, "The parameter");
-        return false;
-      }
-      for (std::size_t index = 0; index < keys.size(); index++)
-      {
-        param_map.emplace(keys.at(index), values.at(index));
-      }
-      return true;
-    }
-  }
-
-  RCLCPP_ERROR_STREAM(LOGGER, "Can't fine parameter " << current_parameter);
-  return false;
-}
-
-FakeJointDriver::FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std::string& robot_description_file_path)
+FakeJointDriver::FakeJointDriver(const rclcpp::Node::SharedPtr& node)
 {
   std::set<std::string> joint_set;
   std::map<std::string, double> start_position_map;
@@ -82,11 +25,17 @@ FakeJointDriver::FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std:
   include_joints_ = node->declare_parameter("include_joints", std::vector<std::string>());
   exclude_joints_ = node->declare_parameter("exclude_joints", std::vector<std::string>());
 
-  //
-  node->declare_parameter("start_position.joints");
-  node->declare_parameter("start_position.values");
+  std::vector<std::string> joint_names = node->declare_parameter("start_position.joints", std::vector<std::string>());
+  std::vector<double> joint_values = node->declare_parameter("start_position.values", std::vector<double>());
 
-  getParameterAsMap(node, "start_position", { "joints", "values" }, start_position_map);
+  if (joint_names.size() != joint_values.size())
+  {
+    RCLCPP_ERROR_STREAM(LOGGER, "start_position.joints and start_position.values must have the same size");
+    return;
+  }
+
+  for (std::size_t i = 0; i < joint_names.size(); i++)
+    start_position_map.emplace(joint_names.at(i), joint_values.at(i));
 
   for (auto it = start_position_map.begin(); it != start_position_map.end(); it++)
   {
@@ -104,33 +53,8 @@ FakeJointDriver::FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std:
   // Read all joints in robot_description
   if (use_description_)
   {
-    std::string urdf_xml;
-    // Load robot description from file
-    try
-    {
-      std::ifstream in(robot_description_file_path, std::ios::in | std::ios::binary);
-      if (in)
-      {
-        in.seekg(0, std::ios::end);
-        urdf_xml.resize(in.tellg());
-        in.seekg(0, std::ios::beg);
-        in.read(&urdf_xml[0], urdf_xml.size());
-        in.close();
-      }
-      else
-      {
-        throw std::system_error(errno, std::system_category(),
-                                "Failed to open URDF file: " + robot_description_file_path);
-      }
-    }
-    catch (const std::runtime_error& err)
-    {
-      RCLCPP_FATAL(LOGGER, "%s", err.what());
-      throw;
-    }
-
+    std::string urdf_xml = node->declare_parameter("robot_description", std::string());
     urdf::Model urdf_model;
-    // TODO(JafarAbdi): Test
     if (urdf_model.initString(urdf_xml))
     {
       for (auto it = urdf_model.joints_.begin(); it != urdf_model.joints_.end(); it++)
@@ -172,6 +96,10 @@ FakeJointDriver::FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std:
   act_dis.resize(joint_names_.size());
   act_vel.resize(joint_names_.size());
   act_eff.resize(joint_names_.size());
+  op_mode.resize(joint_names_.size());
+  joint_state_handles_.resize(joint_names_.size());
+  joint_command_handles_.resize(joint_names_.size());
+  joint_mode_handles_.resize(joint_names_.size());
 
   // Set start position
   for (auto it = start_position_map.begin(); it != start_position_map.end(); it++)
@@ -186,14 +114,27 @@ FakeJointDriver::FakeJointDriver(const rclcpp::Node::SharedPtr& node, const std:
     }
   }
 
-  // Create joint_state_interface and position_joint_interface
+  // Create joint_state_interface
   for (int i = 0; i < joint_names_.size(); i++)
   {
     RCLCPP_DEBUG_STREAM(LOGGER, "joint[" << i << "]:" << joint_names_[i]);
     // Connect and register the joint_state_interface
-    hardware_interface::JointStateHandle state_handle(joint_names_[i], &act_dis[i], &act_vel[i], &act_eff[i]);
-    if (register_joint_state_handle(&state_handle) != hardware_interface::HW_RET_OK)
-      throw std::runtime_error("unable to register " + state_handle.get_name());
+    joint_state_handles_[i] =
+        hardware_interface::JointStateHandle(joint_names_[i], &act_dis[i], &act_vel[i], &act_eff[i]);
+    if (register_joint_state_handle(&joint_state_handles_[i]) != hardware_interface::HW_RET_OK)
+      throw std::runtime_error("unable to register " + joint_state_handles_[i].get_name());
+
+    joint_command_handles_[i] = hardware_interface::JointCommandHandle(joint_names_[i], &cmd_dis[i]);
+    if (register_joint_command_handle(&joint_command_handles_[i]) != hardware_interface::HW_RET_OK)
+    {
+      throw std::runtime_error("unable to register " + joint_command_handles_[i].get_name());
+    }
+
+    joint_mode_handles_[i] = hardware_interface::OperationModeHandle(joint_names_[i], &op_mode[i]);
+    if (register_operation_mode_handle(&joint_mode_handles_[i]) != hardware_interface::HW_RET_OK)
+    {
+      throw std::runtime_error("unable to register " + joint_mode_handles_[i].get_name());
+    }
   }
 }
 
