@@ -48,6 +48,12 @@ sliders to set the joint trajectory goals.
 
 # Parameters
 
+- `main_loop_rate`
+
+  The internal loop rate at which the robot controls are updated.
+  This rate is a hard limit for joint state publishers. The default
+  value is set to 100 Hz.
+
 - `use_robot_description`
 
   When it is true, the driver read the parameter `/robot_description`
