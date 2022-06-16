@@ -24,15 +24,18 @@ int main(int argc, char **argv)
   // Connect to controller manager
   controller_manager::ControllerManager cm(&robot, nh);
 
-  // Set spin ratge
-  ros::Rate rate(1.0 / ros::Duration(0.010).toSec());
+  // Set loop rate
+  ros::NodeHandle pnh("~");
+  int loop_rate;
+  pnh.param<int>("main_loop_rate", loop_rate, 100);
+  ros::Rate rate(loop_rate);
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
   while (ros::ok())
   {
     robot.update();
-    cm.update(ros::Time::now(), ros::Duration(0.010));
+    cm.update(ros::Time::now(), rate.expectedCycleTime());
     rate.sleep();
   }
   spinner.stop();
