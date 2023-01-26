@@ -18,7 +18,11 @@
   <depend>roslaunch</depend>
   <depend>rostest</depend>
 
+  <!--
   <exec_depend>abb_irb2400_support</exec_depend>
+  it is used by an example launch file, but transitively
+  depending on the abb_driver is quite heavy weight for this package
+  -->
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>pr2_description</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
